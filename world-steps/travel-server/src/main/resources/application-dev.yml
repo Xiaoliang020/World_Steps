@@ -1,0 +1,8 @@
+travel:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: travel-app
+    username: root
+    password: ${DB_PASSWORD}
