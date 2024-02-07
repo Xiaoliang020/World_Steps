@@ -3,6 +3,6 @@ travel:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: localhost
     port: 3306
-    database: travel-app
+    database: travel_app
     username: root
     password: ${DB_PASSWORD}
