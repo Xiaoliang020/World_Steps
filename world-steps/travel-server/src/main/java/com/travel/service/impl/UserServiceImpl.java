@@ -2,7 +2,10 @@ package com.travel.service.impl;
 
 import com.travel.constant.MessageConstant;
 import com.travel.dto.UserDTO;
+import com.travel.dto.UserLoginDTO;
 import com.travel.entity.User;
+import com.travel.exception.AccountNotFoundException;
+import com.travel.exception.PasswordErrorException;
 import com.travel.exception.RegisterFailedException;
 import com.travel.mapper.UserMapper;
 import com.travel.service.UserService;
@@ -25,11 +28,11 @@ public class UserServiceImpl implements UserService {
      */
     public void save(UserDTO userDTO) {
         //Check if the user already exists
-        if (userMapper.findByEmail(userDTO.getEmail()) != null) {
+        if (userMapper.getByEmail(userDTO.getEmail()) != null) {
             throw new RegisterFailedException(MessageConstant.DUPLICATE_EMAIL);
         }
 
-        if (userMapper.findByUsername(userDTO.getUsername()) != null) {
+        if (userMapper.getByUsername(userDTO.getUsername()) != null) {
             throw new RegisterFailedException(MessageConstant.DUPLICATE_USERNAME);
         }
 
@@ -45,5 +48,32 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(LocalDateTime.now());
 
         userMapper.insert(user);
+    }
+
+    /**
+     * User login
+     * @param userLoginDTO
+     * @return
+     */
+    public User login(UserLoginDTO userLoginDTO) {
+        String username = userLoginDTO.getUsername();
+        String password = userLoginDTO.getPassword();
+
+        User user = userMapper.getByUsername(username);
+
+        if (user == null) {
+            // Account does not exist
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+
+        // Password compare
+        // Use MD5 to encrypt first
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        if (!password.equals(user.getPassword())) {
+            //密码错误
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        return user;
     }
 }

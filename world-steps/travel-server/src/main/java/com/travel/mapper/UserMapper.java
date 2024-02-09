@@ -23,7 +23,7 @@ public interface UserMapper {
      * @return
      */
     @Select("select * from user where username=#{username}")
-    User findByUsername(String username);
+    User getByUsername(String username);
 
     /**
      * Find a user by email
@@ -31,5 +31,6 @@ public interface UserMapper {
      * @return
      */
     @Select("select * from user where email=#{email}")
-    User findByEmail(String email);
+    User getByEmail(String email);
+
 }
