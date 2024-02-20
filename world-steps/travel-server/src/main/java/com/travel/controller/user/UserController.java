@@ -1,5 +1,6 @@
 package com.travel.controller.user;
 
+import com.travel.annotation.Log;
 import com.travel.constant.JwtClaimsConstant;
 import com.travel.dto.UserDTO;
 import com.travel.dto.UserLoginDTO;
@@ -38,6 +39,12 @@ public class UserController {
         return Result.success();
     }
 
+    /**
+     * User log in
+     * @param userLoginDTO
+     * @return
+     */
+    @Log
     @PostMapping("/login")
     @ApiOperation("User login")
     public Result login(@RequestBody UserLoginDTO userLoginDTO) {
@@ -60,6 +67,14 @@ public class UserController {
                 .build();
 
         return Result.success(userLoginVO);
+    }
+
+    @PutMapping
+    @ApiOperation("Update User info")
+    public Result update(@RequestBody UserDTO userDTO) {
+        log.info("Edit user info: {}", userDTO);
+        userService.update(userDTO);
+        return Result.success();
     }
 
 }

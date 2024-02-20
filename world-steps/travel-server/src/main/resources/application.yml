@@ -6,12 +6,20 @@ spring:
     active: dev
   main:
     allow-circular-references: true
+  servlet:
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 10MB
   datasource:
     druid:
       driver-class-name: ${travel.datasource.driver-class-name}
       url: jdbc:mysql://${travel.datasource.host}:${travel.datasource.port}/${travel.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${travel.datasource.username}
       password: ${travel.datasource.password}
+  data:
+    mongodb:
+      database: ${travel.mongodb.database}
+      uri: mongodb+srv://${travel.mongodb.user}:${travel.mongodb.password}@${travel.mongodb.cluster}
 
 mybatis:
   #mapper配置文件
@@ -40,3 +48,8 @@ travel:
     user-secret-key: traveluser
     user-ttl: 7200000
     user-token-name: token
+  alioss:
+    endpoint: ${travel.alioss.endpoint}
+    access-key-id: ${travel.alioss.access-key-id}
+    access-key-secret: ${travel.alioss.access-key-secret}
+    bucket-name: ${travel.alioss.bucket-name}

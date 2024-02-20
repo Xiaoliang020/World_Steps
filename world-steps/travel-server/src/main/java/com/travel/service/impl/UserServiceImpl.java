@@ -76,4 +76,15 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    /**
+     * Update user info
+     * @param userDTO
+     */
+    public void update(UserDTO userDTO) {
+        User user = new User();
+        BeanUtils.copyProperties(userDTO, user);
+
+        userMapper.update(user);
+    }
 }

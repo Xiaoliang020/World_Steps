@@ -30,15 +30,15 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenUserInterceptor jwtTokenUserInterceptor;
 
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        log.info("Start CORS mapping...");
-//        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:3000")
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                .allowedHeaders("*")
-//                .allowCredentials(true);
-//    }
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        log.info("Start CORS mapping...");
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
 
 
     /**

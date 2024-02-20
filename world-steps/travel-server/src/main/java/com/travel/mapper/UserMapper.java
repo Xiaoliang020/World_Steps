@@ -33,4 +33,10 @@ public interface UserMapper {
     @Select("select * from user where email=#{email}")
     User getByEmail(String email);
 
+
+    /**
+     * Update use info
+     * @param user
+     */
+    void update(User user);
 }

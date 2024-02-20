@@ -18,4 +18,10 @@ public interface UserService {
      * @return
      */
     User login(UserLoginDTO userLoginDTO);
+
+    /**
+     * Update user info
+     * @param userDTO
+     */
+    void update(UserDTO userDTO);
 }
