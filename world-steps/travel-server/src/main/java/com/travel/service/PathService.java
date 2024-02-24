@@ -4,6 +4,7 @@ import com.travel.dto.PathDTO;
 import com.travel.dto.PathImageDTO;
 import com.travel.dto.PathPageQueryDTO;
 import com.travel.result.PageResult;
+import com.travel.vo.PathShareVO;
 import com.travel.vo.PathVO;
 
 import java.util.List;
@@ -35,4 +36,11 @@ public interface PathService {
      * @param pathId
      */
     void deleteById(String pathId);
+
+    /**
+     * Get path by id
+     * @param pathId
+     * @return
+     */
+    PathShareVO getById(String pathId);
 }

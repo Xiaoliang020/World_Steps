@@ -4,7 +4,6 @@ import com.travel.constant.MessageConstant;
 import com.travel.context.BaseContext;
 import com.travel.dto.MarkerDTO;
 import com.travel.entity.Marker;
-import com.travel.entity.Path;
 import com.travel.exception.MarkerException;
 import com.travel.repository.MarkerRepository;
 import com.travel.service.MarkerService;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,5 +50,16 @@ public class MarkerServiceImpl implements MarkerService {
         BeanUtils.copyProperties(markerDTO, oldMarker, "id");
 
         markerRepository.save(oldMarker);
+    }
+
+    /**
+     * Get markers by path id
+     * @param pathId
+     * @return
+     */
+    public List<Marker> getByPathId(String pathId) {
+        List<Marker> markerList = markerRepository.findByPathID(pathId);
+
+        return markerList;
     }
 }

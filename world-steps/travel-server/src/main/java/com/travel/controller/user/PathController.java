@@ -6,7 +6,7 @@ import com.travel.dto.PathPageQueryDTO;
 import com.travel.result.PageResult;
 import com.travel.result.Result;
 import com.travel.service.PathService;
-import com.travel.vo.PathVO;
+import com.travel.vo.PathShareVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -75,5 +75,18 @@ public class PathController {
         log.info("删除路径：{}", pathId);
         pathService.deleteById(pathId);
         return Result.success();
+    }
+
+    /**
+     * Get path by id
+     * @param pathId
+     * @return
+     */
+    @GetMapping("/{pathId}")
+    @ApiOperation("Get path by id")
+    public Result<PathShareVO> getById(@PathVariable String pathId) {
+        log.info("获取路径：{}", pathId);
+        PathShareVO pathShareVO = pathService.getById(pathId);
+        return Result.success(pathShareVO);
     }
 }

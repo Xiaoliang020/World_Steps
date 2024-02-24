@@ -12,6 +12,7 @@ import com.travel.repository.MarkerRepository;
 import com.travel.repository.PathRepository;
 import com.travel.result.PageResult;
 import com.travel.service.PathService;
+import com.travel.vo.PathShareVO;
 import org.aspectj.bridge.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PathServiceImpl implements PathService {
@@ -103,5 +105,23 @@ public class PathServiceImpl implements PathService {
         }
 
         pathRepository.deleteById(pathId);
+    }
+
+    /**
+     * Get path by id
+     * @param pathId
+     * @return
+     */
+    public PathShareVO getById(String pathId) {
+        if (!pathRepository.existsById(pathId)) {
+            throw new DeletionNotAllowedException(MessageConstant.PATH_NOT_FOUND);
+        }
+
+        Optional<Path> pathOptional = pathRepository.findById(pathId);
+        Path path = pathOptional.get();
+        PathShareVO pathShareVO = new PathShareVO();
+        BeanUtils.copyProperties(path, pathShareVO);
+
+        return pathShareVO;
     }
 }
