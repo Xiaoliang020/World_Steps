@@ -5,8 +5,10 @@ import com.travel.dto.PathDTO;
 import com.travel.dto.PathImageDTO;
 import com.travel.dto.PathPageQueryDTO;
 import com.travel.entity.Coordinate;
+import com.travel.entity.Marker;
 import com.travel.entity.Path;
 import com.travel.exception.DeletionNotAllowedException;
+import com.travel.repository.MarkerRepository;
 import com.travel.repository.PathRepository;
 import com.travel.result.PageResult;
 import com.travel.service.PathService;
@@ -30,6 +32,9 @@ public class PathServiceImpl implements PathService {
 
     @Autowired
     private PathRepository pathRepository;
+
+    @Autowired
+    private MarkerRepository markerRepository;
 
     /**
      * Save the path in database
@@ -90,6 +95,11 @@ public class PathServiceImpl implements PathService {
     public void deleteById(String pathId) {
         if (!pathRepository.existsById(pathId)) {
             throw new DeletionNotAllowedException(MessageConstant.PATH_NOT_FOUND);
+        }
+
+        List<Marker> markerList = markerRepository.findByPathID(pathId);
+        for (Marker marker : markerList) {
+            markerRepository.deleteById(marker.getId());
         }
 
         pathRepository.deleteById(pathId);
