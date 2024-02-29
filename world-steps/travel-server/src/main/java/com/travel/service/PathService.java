@@ -5,9 +5,6 @@ import com.travel.dto.PathImageDTO;
 import com.travel.dto.PathPageQueryDTO;
 import com.travel.result.PageResult;
 import com.travel.vo.PathShareVO;
-import com.travel.vo.PathVO;
-
-import java.util.List;
 
 public interface PathService {
 
