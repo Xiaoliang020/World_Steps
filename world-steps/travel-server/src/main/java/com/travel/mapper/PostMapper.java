@@ -7,6 +7,7 @@ import com.travel.vo.PostVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface PostMapper {
@@ -34,4 +35,12 @@ public interface PostMapper {
      */
     @Select("select * from post where id = #{id}")
     Post getById(Long id);
+
+    /**
+     * Update count of comment
+     * @param postId
+     * @param count
+     */
+    @Update("update post set comment_count = #{count} where id = #{postId}")
+    void updateCount(Long postId, int count);
 }

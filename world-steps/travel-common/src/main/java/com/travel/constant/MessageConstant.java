@@ -27,4 +27,5 @@ public class MessageConstant {
     public static final String ORDER_NOT_FOUND = "订单不存在";
     public static final String PATH_NOT_FOUND = "路径不存在";
     public static final String MARKER_NOT_FOUND = "标点不存在";
+    public static final String POST_NOT_FOUND = "帖子不存在";
 }

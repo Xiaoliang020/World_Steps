@@ -1,5 +1,6 @@
 package com.travel.service;
 
+import com.travel.dto.CommentDTO;
 import com.travel.dto.PostDTO;
 import com.travel.dto.PostPageQueryDTO;
 import com.travel.result.PageResult;
@@ -26,4 +27,10 @@ public interface PostService {
      * @return
      */
     PostVO getById(Long postId);
+
+    /**
+     * Add a new comment reply to post
+     * @param commentDTO
+     */
+    void addReply(CommentDTO commentDTO);
 }

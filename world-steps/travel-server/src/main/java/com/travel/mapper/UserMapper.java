@@ -39,4 +39,12 @@ public interface UserMapper {
      * @param user
      */
     void update(User user);
+
+    /**
+     * Get username by id
+     * @param userId
+     * @return
+     */
+    @Select("select username from user where id=#{userId}")
+    String getUsernameById(Long userId);
 }

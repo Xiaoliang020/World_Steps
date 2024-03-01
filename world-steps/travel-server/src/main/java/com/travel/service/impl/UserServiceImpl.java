@@ -87,4 +87,14 @@ public class UserServiceImpl implements UserService {
 
         userMapper.update(user);
     }
+
+    /**
+     * Get username by id
+     * @param userId
+     * @return
+     */
+    public String getUsername(Long userId) {
+        String username = userMapper.getUsernameById(userId);
+        return username;
+    }
 }

@@ -69,12 +69,30 @@ public class UserController {
         return Result.success(userLoginVO);
     }
 
+    /**
+     * Update User info
+     * @param userDTO
+     * @return
+     */
     @PutMapping
     @ApiOperation("Update User info")
     public Result update(@RequestBody UserDTO userDTO) {
         log.info("Edit user info: {}", userDTO);
         userService.update(userDTO);
         return Result.success();
+    }
+
+    /**
+     * Get user name by id
+     * @param userId
+     * @return
+     */
+    @GetMapping("/{userId}")
+    @ApiOperation("Get user name by id")
+    public Result<String> getUsername(@PathVariable Long userId) {
+        log.info("Get username by id: {}", userId);
+        String username = userService.getUsername(userId);
+        return Result.success(username);
     }
 
 }

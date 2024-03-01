@@ -24,4 +24,11 @@ public interface UserService {
      * @param userDTO
      */
     void update(UserDTO userDTO);
+
+    /**
+     * Get username by id
+     * @param userId
+     * @return
+     */
+    String getUsername(Long userId);
 }

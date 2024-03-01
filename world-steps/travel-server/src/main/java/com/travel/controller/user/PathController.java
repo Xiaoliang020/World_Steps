@@ -57,7 +57,7 @@ public class PathController {
     @GetMapping("/page")
     @ApiOperation("Path page query")
     public Result<PageResult> page(PathPageQueryDTO pathPageQueryDTO) {
-        log.info("分页查询：{}", pathPageQueryDTO);
+        log.info("分页查询路径：{}", pathPageQueryDTO);
         PageResult pageResult= pathService.pageQuery(pathPageQueryDTO);
         return Result.success(pageResult);
     }

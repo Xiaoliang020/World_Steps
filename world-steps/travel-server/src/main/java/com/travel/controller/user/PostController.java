@@ -1,5 +1,6 @@
 package com.travel.controller.user;
 
+import com.travel.dto.CommentDTO;
 import com.travel.dto.PostDTO;
 import com.travel.dto.PostPageQueryDTO;
 import com.travel.result.PageResult;
@@ -59,5 +60,13 @@ public class PostController {
         log.info("查询帖子：{}", postId);
         PostVO postVO = postService.getById(postId);
         return Result.success(postVO);
+    }
+
+    @PostMapping("/reply")
+    @ApiOperation("Add a new reply comment")
+    public Result addReplyToPost( @RequestBody CommentDTO commentDTO) {
+        log.info("回复帖子：{}", commentDTO);
+        postService.addReply(commentDTO);
+        return Result.success();
     }
 }
