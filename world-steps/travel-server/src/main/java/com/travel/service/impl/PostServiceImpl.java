@@ -2,6 +2,9 @@ package com.travel.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.travel.context.BaseContext;
+import com.travel.dto.LikeDTO;
+import com.travel.service.LikeService;
 import com.travel.service.PostService;
 import com.travel.constant.MessageConstant;
 import com.travel.dto.CommentDTO;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -31,6 +35,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private LikeService likeService;
 
     /**
      * Save a post
@@ -51,7 +58,14 @@ public class PostServiceImpl implements PostService {
     public PageResult pageQuery(PostPageQueryDTO postPageQueryDTO) {
         PageHelper.startPage(postPageQueryDTO.getPage(), postPageQueryDTO.getPageSize());
         Page<PostVO> page = postMapper.pageQuery(postPageQueryDTO);
-        return new PageResult(page.getTotal(), page.getResult());
+        List<PostVO> postVOList = page.getResult();
+        for (PostVO postVO : postVOList) {
+            LikeDTO likeDTO = new LikeDTO();
+            likeDTO.setEntityId(postVO.getId());
+            likeDTO.setEntityType(Comment.ENTITY_TYPE_POST);
+            postVO.setLikeCount(likeService.findEntityLikeCount(likeDTO));
+        }
+        return new PageResult(page.getTotal(), postVOList);
     }
 
     /**
@@ -63,6 +77,13 @@ public class PostServiceImpl implements PostService {
         Post post = postMapper.getById(postId);
         PostVO postVO = new PostVO();
         BeanUtils.copyProperties(post, postVO);
+
+        LikeDTO likeDTO = new LikeDTO();
+        likeDTO.setEntityId(postVO.getId());
+        likeDTO.setEntityType(Comment.ENTITY_TYPE_POST);
+        likeDTO.setUserId(BaseContext.getCurrentId());
+        postVO.setLikeCount(likeService.findEntityLikeCount(likeDTO));
+        postVO.setLikeStatus(likeService.findLikeStatus(likeDTO));
 
         return postVO;
     }

@@ -3,6 +3,7 @@ package com.travel.mapper;
 import com.github.pagehelper.Page;
 import com.travel.dto.CommentPageQueryDTO;
 import com.travel.entity.Comment;
+import com.travel.vo.CommentVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -35,6 +36,6 @@ public interface CommentMapper {
      * @return
      */
     @Select("select * from comment where entity_id = #{entityId} and entity_type = #{entityType} and status = 0")
-    List<Comment> getByEntity(int entityType, Long entityId);
+    List<CommentVO> getByEntity(int entityType, Long entityId);
 
 }

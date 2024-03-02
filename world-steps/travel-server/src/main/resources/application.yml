@@ -20,6 +20,11 @@ spring:
     mongodb:
       database: ${travel.mongodb.database}
       uri: mongodb+srv://${travel.mongodb.user}:${travel.mongodb.password}@${travel.mongodb.cluster}
+  redis:
+    host: ${travel.redis.host}
+    port: ${travel.redis.port}
+    password: ${travel.redis.password}
+    database: ${travel.redis.database}
 
 mybatis:
   #mapper配置文件

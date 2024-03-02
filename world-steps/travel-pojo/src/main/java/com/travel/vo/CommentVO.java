@@ -1,6 +1,5 @@
 package com.travel.vo;
 
-import com.travel.entity.Comment;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -35,5 +34,11 @@ public class CommentVO {
 
     private LocalDateTime createTime;
 
-    private List<Comment> replies;
+    private List<CommentVO> replies;
+
+    private Long likeCount;
+
+    private int likeStatus;
+
+    private String targetName;
 }

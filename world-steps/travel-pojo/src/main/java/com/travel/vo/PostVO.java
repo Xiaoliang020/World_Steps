@@ -33,4 +33,8 @@ public class PostVO {
     private double score;
 
     private LocalDateTime createTime;
+
+    private Long likeCount;
+
+    private int likeStatus;
 }
