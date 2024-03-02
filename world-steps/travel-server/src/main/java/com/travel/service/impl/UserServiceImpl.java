@@ -1,5 +1,6 @@
 package com.travel.service.impl;
 
+import com.travel.service.UserService;
 import com.travel.constant.MessageConstant;
 import com.travel.dto.UserDTO;
 import com.travel.dto.UserLoginDTO;
@@ -8,7 +9,6 @@ import com.travel.exception.AccountNotFoundException;
 import com.travel.exception.PasswordErrorException;
 import com.travel.exception.RegisterFailedException;
 import com.travel.mapper.UserMapper;
-import com.travel.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

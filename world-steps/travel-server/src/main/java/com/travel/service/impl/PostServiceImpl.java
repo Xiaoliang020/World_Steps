@@ -2,6 +2,7 @@ package com.travel.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.travel.service.PostService;
 import com.travel.constant.MessageConstant;
 import com.travel.dto.CommentDTO;
 import com.travel.dto.PostDTO;
@@ -12,7 +13,6 @@ import com.travel.exception.BaseException;
 import com.travel.mapper.CommentMapper;
 import com.travel.mapper.PostMapper;
 import com.travel.result.PageResult;
-import com.travel.service.PostService;
 import com.travel.vo.PostVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

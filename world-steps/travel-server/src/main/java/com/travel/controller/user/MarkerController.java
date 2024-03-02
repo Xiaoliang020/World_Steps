@@ -4,7 +4,6 @@ import com.travel.dto.MarkerDTO;
 import com.travel.entity.Marker;
 import com.travel.result.Result;
 import com.travel.service.MarkerService;
-import com.travel.vo.PathShareVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

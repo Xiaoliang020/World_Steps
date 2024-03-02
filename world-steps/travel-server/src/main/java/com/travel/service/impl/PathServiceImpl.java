@@ -1,5 +1,6 @@
 package com.travel.service.impl;
 
+import com.travel.service.PathService;
 import com.travel.constant.MessageConstant;
 import com.travel.dto.PathDTO;
 import com.travel.dto.PathImageDTO;
@@ -11,7 +12,6 @@ import com.travel.exception.DeletionNotAllowedException;
 import com.travel.repository.MarkerRepository;
 import com.travel.repository.PathRepository;
 import com.travel.result.PageResult;
-import com.travel.service.PathService;
 import com.travel.vo.PathShareVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
