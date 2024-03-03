@@ -1,6 +1,8 @@
 package com.travel.service;
 
 import com.travel.dto.FollowDTO;
+import com.travel.dto.FollowPageQueryDTO;
+import com.travel.result.PageResult;
 
 public interface FollowService {
 
@@ -40,4 +42,18 @@ public interface FollowService {
      * @return
      */
     boolean hasFollowed(Long userId, int entityType, Long entityId);
+
+    /**
+     * Page query followings
+     * @param followPageQueryDTO
+     * @return
+     */
+    PageResult pageFollowings(FollowPageQueryDTO followPageQueryDTO);
+
+    /**
+     * Page query followers
+     * @param followPageQueryDTO
+     * @return
+     */
+    PageResult pageFollowers(FollowPageQueryDTO followPageQueryDTO);
 }
