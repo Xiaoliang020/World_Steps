@@ -22,4 +22,11 @@ public interface LikeService {
      * @return
      */
     int findLikeStatus(LikeDTO likeDTO);
+
+    /**
+     * Find a user's like count
+     * @param userId
+     * @return
+     */
+    int findUserLikeCount(Long userId);
 }

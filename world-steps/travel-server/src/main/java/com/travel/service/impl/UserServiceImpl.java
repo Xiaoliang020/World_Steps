@@ -1,6 +1,5 @@
 package com.travel.service.impl;
 
-import com.travel.service.UserService;
 import com.travel.constant.MessageConstant;
 import com.travel.dto.UserDTO;
 import com.travel.dto.UserLoginDTO;
@@ -9,6 +8,8 @@ import com.travel.exception.AccountNotFoundException;
 import com.travel.exception.PasswordErrorException;
 import com.travel.exception.RegisterFailedException;
 import com.travel.mapper.UserMapper;
+import com.travel.service.UserService;
+import com.travel.vo.UserProfileVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,5 +97,23 @@ public class UserServiceImpl implements UserService {
     public String getUsername(Long userId) {
         String username = userMapper.getUsernameById(userId);
         return username;
+    }
+
+    /**
+     * Get user profile
+     * @param userId
+     * @return
+     */
+    public UserProfileVO getProfile(Long userId) {
+        User user = userMapper.getById(userId);
+        if (user == null) {
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+
+        UserProfileVO userProfileVO = new UserProfileVO();
+
+        BeanUtils.copyProperties(user, userProfileVO);
+
+        return userProfileVO;
     }
 }

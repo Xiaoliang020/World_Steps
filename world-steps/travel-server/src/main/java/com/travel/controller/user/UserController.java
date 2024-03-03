@@ -1,15 +1,20 @@
 package com.travel.controller.user;
 
 import com.travel.annotation.Log;
+import com.travel.constant.EntityTypeConstant;
 import com.travel.constant.JwtClaimsConstant;
+import com.travel.context.BaseContext;
 import com.travel.dto.UserDTO;
 import com.travel.dto.UserLoginDTO;
 import com.travel.entity.User;
 import com.travel.properties.JwtProperties;
 import com.travel.result.Result;
+import com.travel.service.FollowService;
+import com.travel.service.LikeService;
 import com.travel.service.UserService;
 import com.travel.utils.JwtUtil;
 import com.travel.vo.UserLoginVO;
+import com.travel.vo.UserProfileVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +32,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
     @Autowired
     private JwtProperties jwtProperties;
@@ -95,5 +106,27 @@ public class UserController {
         return Result.success(username);
     }
 
+    @GetMapping("/profile/{userId}")
+    @ApiOperation("Get user profile info")
+    public Result<UserProfileVO> profile(@PathVariable Long userId) {
+        log.info("Get profile by id: {}", userId);
+        UserProfileVO userProfileVO = userService.getProfile(userId);
+        // Get like count
+        int userLikeCount = likeService.findUserLikeCount(userId);
+        userProfileVO.setLikeCount(userLikeCount);
 
+        // Get following count
+        long followingCount = followService.findFollowingCount(userId, EntityTypeConstant.ENTITY_TYPE_USER);
+        userProfileVO.setFollowingCount(followingCount);
+
+        // Get follower count
+        long followerCount = followService.findFollowerCount(EntityTypeConstant.ENTITY_TYPE_USER, userId);
+        userProfileVO.setFollowerCount(followerCount);
+
+        // Get if followed the user
+        boolean hasFollowed = followService.hasFollowed(BaseContext.getCurrentId(), EntityTypeConstant.ENTITY_TYPE_USER, userId);
+        userProfileVO.setHasFollowed(hasFollowed);
+
+        return Result.success(userProfileVO);
+    }
 }

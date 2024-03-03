@@ -2,15 +2,16 @@ package com.travel.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.travel.constant.EntityTypeConstant;
 import com.travel.context.BaseContext;
-import com.travel.dto.LikeDTO;
-import com.travel.service.CommentService;
 import com.travel.dto.CommentDTO;
 import com.travel.dto.CommentPageQueryDTO;
+import com.travel.dto.LikeDTO;
 import com.travel.entity.Comment;
 import com.travel.mapper.CommentMapper;
 import com.travel.mapper.UserMapper;
 import com.travel.result.PageResult;
+import com.travel.service.CommentService;
 import com.travel.service.LikeService;
 import com.travel.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -52,11 +54,11 @@ public class CommentServiceImpl implements CommentService {
             BeanUtils.copyProperties(comment, commentVO);
 
             Long entityId = comment.getId();
-            List<CommentVO> replies = commentMapper.getByEntity(Comment.ENTITY_TYPE_COMMENT, entityId);
+            List<CommentVO> replies = commentMapper.getByEntity(EntityTypeConstant.ENTITY_TYPE_COMMENT, entityId);
             if (replies != null && replies.size() > 0) {
                 List<CommentVO> tempReplies = new ArrayList<>();
                 for (CommentVO reply : replies) {
-                    List<CommentVO> commentList = commentMapper.getByEntity(Comment.ENTITY_TYPE_COMMENT, reply.getId());
+                    List<CommentVO> commentList = commentMapper.getByEntity(EntityTypeConstant.ENTITY_TYPE_COMMENT, reply.getId());
                     if (commentList != null && commentList.size() > 0) {
                         tempReplies.addAll(commentList); // 将元素添加到临时集合中，而不是直接添加到replies中
                     }
@@ -64,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
 
                 LikeDTO likeDTO = new LikeDTO();
                 likeDTO.setEntityId(commentVO.getId());
-                likeDTO.setEntityType(Comment.ENTITY_TYPE_COMMENT);
+                likeDTO.setEntityType(EntityTypeConstant.ENTITY_TYPE_COMMENT);
                 likeDTO.setUserId(BaseContext.getCurrentId());
                 commentVO.setLikeCount(likeService.findEntityLikeCount(likeDTO));
                 commentVO.setLikeStatus(likeService.findLikeStatus(likeDTO));
@@ -81,6 +83,8 @@ public class CommentServiceImpl implements CommentService {
                     reply.setLikeStatus(likeService.findLikeStatus(likeDTO));
                 }
 
+                // 再次按时间排序
+                Collections.sort(replies, (comment1, comment2) -> comment2.getCreateTime().compareTo(comment1.getCreateTime()));
                 commentVO.setReplies(replies);
             }
 
@@ -98,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentDTO, comment);
         comment.setEntityId(commentDTO.getCommentId());
-        comment.setEntityType(Comment.ENTITY_TYPE_COMMENT);
+        comment.setEntityType(EntityTypeConstant.ENTITY_TYPE_COMMENT);
         comment.setStatus(0);
         comment.setCreateTime(LocalDateTime.now());
 

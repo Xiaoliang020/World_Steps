@@ -26,6 +26,8 @@ public class PostVO {
 
     private String pathId;
 
+    private String userId;
+
     private String screenshot;
 
     private int commentCount;

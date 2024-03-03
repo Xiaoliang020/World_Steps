@@ -7,9 +7,6 @@ import java.util.List;
 
 @Data
 public class CommentVO {
-    public static final int ENTITY_TYPE_POST = 1;
-
-    public static final int ENTITY_TYPE_COMMENT = 2;
 
     private Long id;
 

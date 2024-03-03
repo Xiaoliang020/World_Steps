@@ -2,6 +2,7 @@ package com.travel.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.travel.constant.EntityTypeConstant;
 import com.travel.context.BaseContext;
 import com.travel.dto.LikeDTO;
 import com.travel.service.LikeService;
@@ -62,7 +63,7 @@ public class PostServiceImpl implements PostService {
         for (PostVO postVO : postVOList) {
             LikeDTO likeDTO = new LikeDTO();
             likeDTO.setEntityId(postVO.getId());
-            likeDTO.setEntityType(Comment.ENTITY_TYPE_POST);
+            likeDTO.setEntityType(EntityTypeConstant.ENTITY_TYPE_POST);
             postVO.setLikeCount(likeService.findEntityLikeCount(likeDTO));
         }
         return new PageResult(page.getTotal(), postVOList);
@@ -80,7 +81,7 @@ public class PostServiceImpl implements PostService {
 
         LikeDTO likeDTO = new LikeDTO();
         likeDTO.setEntityId(postVO.getId());
-        likeDTO.setEntityType(Comment.ENTITY_TYPE_POST);
+        likeDTO.setEntityType(EntityTypeConstant.ENTITY_TYPE_POST);
         likeDTO.setUserId(BaseContext.getCurrentId());
         postVO.setLikeCount(likeService.findEntityLikeCount(likeDTO));
         postVO.setLikeStatus(likeService.findLikeStatus(likeDTO));
@@ -103,7 +104,7 @@ public class PostServiceImpl implements PostService {
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentDTO, comment);
         comment.setEntityId(postId);
-        comment.setEntityType(Comment.ENTITY_TYPE_POST);
+        comment.setEntityType(EntityTypeConstant.ENTITY_TYPE_POST);
         comment.setStatus(0);
         comment.setCreateTime(LocalDateTime.now());
 

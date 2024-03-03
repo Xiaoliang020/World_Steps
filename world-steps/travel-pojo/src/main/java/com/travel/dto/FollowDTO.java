@@ -8,16 +8,15 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@ApiModel(description = "用户点赞的数据模型")
+@ApiModel(description = "用户关注的数据模型")
 @AllArgsConstructor
 @NoArgsConstructor
-public class LikeDTO implements Serializable {
+public class FollowDTO implements Serializable {
 
     private Long userId;
 
+    // 1: User, 2：Post
     private int entityType;
 
     private Long entityId;
-
-    private Long entityUserId;
 }

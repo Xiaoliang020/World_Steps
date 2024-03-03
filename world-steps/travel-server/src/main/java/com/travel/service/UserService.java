@@ -3,6 +3,7 @@ package com.travel.service;
 import com.travel.dto.UserDTO;
 import com.travel.dto.UserLoginDTO;
 import com.travel.entity.User;
+import com.travel.vo.UserProfileVO;
 
 public interface UserService {
 
@@ -31,4 +32,11 @@ public interface UserService {
      * @return
      */
     String getUsername(Long userId);
+
+    /**
+     * Get user profile
+     * @param userId
+     * @return
+     */
+    UserProfileVO getProfile(Long userId);
 }

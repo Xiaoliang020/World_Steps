@@ -55,4 +55,13 @@ public interface UserMapper {
      */
     @Select("select avatar from user where id=#{userId}")
     String getAvatar(Long userId);
+
+    /**
+     * Get user by id
+     * @param userId
+     * @return
+     */
+    @Select("select * from user where id=#{userId}")
+    User getById(Long userId);
+
 }
