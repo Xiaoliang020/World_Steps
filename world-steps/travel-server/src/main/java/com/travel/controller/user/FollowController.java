@@ -1,7 +1,10 @@
 package com.travel.controller.user;
 
+import com.travel.constant.EntityTypeConstant;
 import com.travel.dto.FollowDTO;
 import com.travel.dto.FollowPageQueryDTO;
+import com.travel.entity.Event;
+import com.travel.event.EventProducer;
 import com.travel.result.PageResult;
 import com.travel.result.Result;
 import com.travel.service.FollowService;
@@ -20,6 +23,9 @@ public class FollowController {
     @Autowired
     private FollowService followService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     /**
      * Follow an entity
      * @param followDTO
@@ -30,6 +36,18 @@ public class FollowController {
     public Result follow(@RequestBody FollowDTO followDTO) {
         log.info("Follow: {}", followDTO);
         followService.follow(followDTO);
+
+        // Send notification
+        Event event = Event.builder()
+                .topic(EntityTypeConstant.TOPIC_FOLLOW)
+                .userId(followDTO.getUserId())
+                .entityType(followDTO.getEntityType())
+                .entityId(followDTO.getEntityId())
+                .entityUserId(followDTO.getEntityId())
+                .build();
+
+        eventProducer.fireEvent(event);
+
         return Result.success();
     }
 

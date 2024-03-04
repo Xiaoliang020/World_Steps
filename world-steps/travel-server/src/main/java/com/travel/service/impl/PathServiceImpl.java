@@ -1,5 +1,6 @@
 package com.travel.service.impl;
 
+import com.travel.exception.BaseException;
 import com.travel.service.PathService;
 import com.travel.constant.MessageConstant;
 import com.travel.dto.PathDTO;
@@ -112,7 +113,7 @@ public class PathServiceImpl implements PathService {
      */
     public PathShareVO getById(String pathId) {
         if (!pathRepository.existsById(pathId)) {
-            throw new DeletionNotAllowedException(MessageConstant.PATH_NOT_FOUND);
+            throw new BaseException(MessageConstant.PATH_NOT_FOUND);
         }
 
         Optional<Path> pathOptional = pathRepository.findById(pathId);

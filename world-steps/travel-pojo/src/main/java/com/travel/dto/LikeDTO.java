@@ -20,4 +20,6 @@ public class LikeDTO implements Serializable {
     private Long entityId;
 
     private Long entityUserId;
+
+    private Long postId;
 }

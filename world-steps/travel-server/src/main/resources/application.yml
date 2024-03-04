@@ -25,6 +25,12 @@ spring:
     port: ${travel.redis.port}
     password: ${travel.redis.password}
     database: ${travel.redis.database}
+  kafka:
+    bootstrap-servers: ${travel.kafka.host}:${travel.kafka.port}
+    consumer:
+      group-id: community-consumer-group
+      enable-auto-commit: true
+      auto-commit-interval: 3000
 
 mybatis:
   #mapper配置文件

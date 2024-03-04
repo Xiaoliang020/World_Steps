@@ -1,7 +1,11 @@
 package com.travel.controller.user;
 
+import com.travel.constant.EntityTypeConstant;
+import com.travel.context.BaseContext;
 import com.travel.dto.CommentDTO;
 import com.travel.dto.CommentPageQueryDTO;
+import com.travel.entity.Event;
+import com.travel.event.EventProducer;
 import com.travel.result.PageResult;
 import com.travel.result.Result;
 import com.travel.service.CommentService;
@@ -11,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user/comment")
 @Api(tags = "Comment related interfaces")
@@ -19,6 +26,9 @@ public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     /**
      * Page query comment
@@ -43,6 +53,21 @@ public class CommentController {
     public Result addReplyToComment(@RequestBody CommentDTO commentDTO) {
         log.info("回复评论：{}", commentDTO);
         commentService.add(commentDTO);
+
+        // Send notification
+        Map<String, Object> data = new HashMap<>();
+        data.put("postId", commentDTO.getPostId());
+        Event event = Event.builder()
+                .topic(EntityTypeConstant.TOPIC_COMMENT)
+                .userId(BaseContext.getCurrentId())
+                .entityType(EntityTypeConstant.ENTITY_TYPE_COMMENT)
+                .entityId(commentDTO.getCommentId())
+                .entityUserId(commentDTO.getTargetId())
+                .data(data)
+                .build();
+
+        eventProducer.fireEvent(event);
+
         return Result.success();
     }
 }

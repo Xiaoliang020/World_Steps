@@ -5,6 +5,9 @@ import com.travel.dto.MessageDTO;
 import com.travel.dto.MessagePageQueryDTO;
 import com.travel.dto.MessageUnreadDTO;
 import com.travel.result.PageResult;
+import com.travel.vo.NotificationVO;
+
+import java.util.List;
 
 public interface MessageService {
 
@@ -41,4 +44,11 @@ public interface MessageService {
      * @return
      */
     int getUnreadCount(MessageUnreadDTO messageUnreadDTO);
+
+    /**
+     * Get three type of notifications
+     * @param userId
+     * @return
+     */
+    List<NotificationVO> getNotifications(Long userId);
 }

@@ -1,8 +1,12 @@
 package com.travel.controller.user;
 
+import com.travel.constant.EntityTypeConstant;
+import com.travel.context.BaseContext;
 import com.travel.dto.CommentDTO;
 import com.travel.dto.PostDTO;
 import com.travel.dto.PostPageQueryDTO;
+import com.travel.entity.Event;
+import com.travel.event.EventProducer;
 import com.travel.result.PageResult;
 import com.travel.result.Result;
 import com.travel.service.PostService;
@@ -13,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user/post")
 @Slf4j
@@ -21,6 +28,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     /**
      * Save the post user created
@@ -67,6 +77,21 @@ public class PostController {
     public Result addReplyToPost( @RequestBody CommentDTO commentDTO) {
         log.info("回复帖子：{}", commentDTO);
         postService.addReply(commentDTO);
+
+        // Send notification
+        Map<String, Object> data = new HashMap<>();
+        data.put("postId", commentDTO.getPostId());
+        Event event = Event.builder()
+                .topic(EntityTypeConstant.TOPIC_COMMENT)
+                .userId(BaseContext.getCurrentId())
+                .entityType(EntityTypeConstant.ENTITY_TYPE_POST)
+                .entityId(commentDTO.getPostId())
+                .entityUserId(commentDTO.getTargetId())
+                .data(data)
+                .build();
+
+        eventProducer.fireEvent(event);
+
         return Result.success();
     }
 }

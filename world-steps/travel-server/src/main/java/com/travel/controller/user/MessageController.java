@@ -1,16 +1,20 @@
 package com.travel.controller.user;
 
+import com.travel.context.BaseContext;
 import com.travel.dto.MessageConversationPageQueryDTO;
 import com.travel.dto.MessageDTO;
 import com.travel.dto.MessagePageQueryDTO;
 import com.travel.result.PageResult;
 import com.travel.result.Result;
 import com.travel.service.MessageService;
+import com.travel.vo.NotificationVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user/message")
@@ -57,5 +61,17 @@ public class MessageController {
         log.info("分页查询会话历史列表：{}", messageConversationPageQueryDTO);
         PageResult pageResult= messageService.conversationPageQuery(messageConversationPageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * Get notifications
+     * @return
+     */
+    @GetMapping("/notice")
+    @ApiOperation("Get notifications")
+    public Result<List<NotificationVO>> notification(){
+        log.info("查询通知：{}", BaseContext.getCurrentId());
+        List<NotificationVO> notifications = messageService.getNotifications(BaseContext.getCurrentId());
+        return Result.success(notifications);
     }
 }

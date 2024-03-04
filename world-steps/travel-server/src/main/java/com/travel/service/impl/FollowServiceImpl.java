@@ -5,9 +5,9 @@ import com.travel.context.BaseContext;
 import com.travel.dto.FollowDTO;
 import com.travel.dto.FollowPageQueryDTO;
 import com.travel.entity.User;
-import com.travel.mapper.UserMapper;
 import com.travel.result.PageResult;
 import com.travel.service.FollowService;
+import com.travel.service.UserService;
 import com.travel.utils.RedisKeyUtil;
 import com.travel.vo.UserFollowVO;
 import org.springframework.beans.BeanUtils;
@@ -29,7 +29,7 @@ public class FollowServiceImpl implements FollowService {
     private RedisTemplate redisTemplate;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     /**
      * Follow an entity
@@ -154,7 +154,7 @@ public class FollowServiceImpl implements FollowService {
         List<UserFollowVO> list = new ArrayList<>();
         for (Integer targetId : targetIds) {
             System.out.println("Get user: " + targetId);
-            User user = userMapper.getById(Long.valueOf(targetId));
+            User user = userService.findUserById(Long.valueOf(targetId));
             UserFollowVO userFollowVO = new UserFollowVO();
             BeanUtils.copyProperties(user, userFollowVO);
             userFollowVO.setHasFollowed(hasFollowed(BaseContext.getCurrentId(), EntityTypeConstant.ENTITY_TYPE_USER, user.getId()));

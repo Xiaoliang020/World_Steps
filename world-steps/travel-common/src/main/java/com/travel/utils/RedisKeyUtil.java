@@ -12,6 +12,8 @@ public class RedisKeyUtil {
 
     private static final String PREFIX_FOLLOWEE = "followee";
 
+    private static final String PREFIX_USER = "user";
+
     // Some entity's likes
     // like:entity:entityType:entityId -> set(userId)
     public static String getEntityLikeKey(int entityType, Long entityId) {
@@ -34,5 +36,10 @@ public class RedisKeyUtil {
     // follower:entityType:entityId -> zset(userId, now)
     public static String getFollowerKey(int entityType, Long entityId) {
         return PREFIX_FOLLOWER + SPLIT + entityType + SPLIT + entityId;
+    }
+
+    // User
+    public static String getUserKey(Long userId) {
+        return PREFIX_USER + SPLIT + userId;
     }
 }

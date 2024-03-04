@@ -9,19 +9,25 @@ import com.travel.exception.PasswordErrorException;
 import com.travel.exception.RegisterFailedException;
 import com.travel.mapper.UserMapper;
 import com.travel.service.UserService;
+import com.travel.utils.RedisKeyUtil;
 import com.travel.vo.UserProfileVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * User register a new account
@@ -85,7 +91,7 @@ public class UserServiceImpl implements UserService {
     public void update(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
-
+        clearCache(user.getId());
         userMapper.update(user);
     }
 
@@ -95,7 +101,9 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public String getUsername(Long userId) {
-        String username = userMapper.getUsernameById(userId);
+        User user = findUserById(userId);
+//        String username = userMapper.getUsernameById(userId);
+        String username = user.getUsername();
         return username;
     }
 
@@ -105,7 +113,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public UserProfileVO getProfile(Long userId) {
-        User user = userMapper.getById(userId);
+        User user = findUserById(userId);
         if (user == null) {
             throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
         }
@@ -115,5 +123,48 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(user, userProfileVO);
 
         return userProfileVO;
+    }
+
+    /**
+     * Find user by id
+     * @param userId
+     * @return
+     */
+    public User findUserById(Long userId) {
+        User user = getCache(userId);
+        if (user == null) {
+            user = initCache(userId);
+        }
+        return user;
+    }
+
+    /**
+     * Get user info from cache
+     * @param userId
+     */
+    private User getCache(Long userId) {
+        String redisKey = RedisKeyUtil.getUserKey(userId);
+        return (User) redisTemplate.opsForValue().get(redisKey);
+    }
+
+    /**
+     * Initialize user data in redis
+     * @param userId
+     * @return
+     */
+    private User initCache(Long userId) {
+        User user = userMapper.getById(userId);
+        String redisKey = RedisKeyUtil.getUserKey(userId);
+        redisTemplate.opsForValue().set(redisKey, user, 3600, TimeUnit.SECONDS);
+        return user;
+    }
+
+    /**
+     * Clear redis data when data changed
+     * @param userId
+     */
+    private void clearCache(Long userId) {
+        String redisKey = RedisKeyUtil.getUserKey(userId);
+        redisTemplate.delete(redisKey);
     }
 }

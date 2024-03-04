@@ -51,4 +51,28 @@ public interface MessageMapper {
      */
     int getUnreadCount(MessageUnreadDTO messageUnreadDTO);
 
+    /**
+     * Get the latest notice of a topic
+     * @param userId
+     * @param topic
+     * @return
+     */
+    Message getLatestNotice(Long userId, String topic);
+
+    /**
+     * Get count of notice of a topic
+     * @param userId
+     * @param topic
+     * @return
+     */
+    int getNoticeCount(Long userId, String topic);
+
+    /**
+     * Get count of unread notice of a topic
+     * @param userId
+     * @param topic
+     * @return
+     */
+    int getNoticeUnreadCount(Long userId, String topic);
+
 }

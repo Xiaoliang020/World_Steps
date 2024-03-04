@@ -22,3 +22,6 @@ travel:
 #    password: chncFTyFoBrfLUGv
     password: ${MONGODB_PASSWORD}
     cluster: cluster0.ydsuord.mongodb.net
+  kafka:
+    host: localhost
+    port: 9092

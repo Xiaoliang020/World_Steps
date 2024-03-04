@@ -39,4 +39,11 @@ public interface UserService {
      * @return
      */
     UserProfileVO getProfile(Long userId);
+
+    /**
+     * Find user by id
+     * @param userId
+     * @return
+     */
+    User findUserById(Long userId);
 }
