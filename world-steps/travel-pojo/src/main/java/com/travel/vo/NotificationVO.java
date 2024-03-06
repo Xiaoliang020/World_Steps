@@ -22,9 +22,13 @@ public class NotificationVO {
 
     private String username;
 
+    private String avatar;
+
     private int entityType;
 
     private Long entityId;
+
+    private Long userId;
 
     private Long postId;
 

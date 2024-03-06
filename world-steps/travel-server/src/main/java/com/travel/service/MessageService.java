@@ -1,9 +1,6 @@
 package com.travel.service;
 
-import com.travel.dto.MessageConversationPageQueryDTO;
-import com.travel.dto.MessageDTO;
-import com.travel.dto.MessagePageQueryDTO;
-import com.travel.dto.MessageUnreadDTO;
+import com.travel.dto.*;
 import com.travel.result.PageResult;
 import com.travel.vo.NotificationVO;
 
@@ -51,4 +48,11 @@ public interface MessageService {
      * @return
      */
     List<NotificationVO> getNotifications(Long userId);
+
+    /**
+     * Page query notifications under a topic
+     * @param noticePageQueryDTO
+     * @return
+     */
+    PageResult pageQueryNotification(NoticePageQueryDTO noticePageQueryDTO);
 }

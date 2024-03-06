@@ -6,10 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.travel.constant.EntityTypeConstant;
 import com.travel.constant.MessageConstant;
 import com.travel.context.BaseContext;
-import com.travel.dto.MessageConversationPageQueryDTO;
-import com.travel.dto.MessageDTO;
-import com.travel.dto.MessagePageQueryDTO;
-import com.travel.dto.MessageUnreadDTO;
+import com.travel.dto.*;
 import com.travel.entity.Message;
 import com.travel.entity.User;
 import com.travel.exception.AccountNotFoundException;
@@ -179,8 +176,8 @@ public class MessageServiceImpl implements MessageService {
             Integer userIntId = (Integer) data.get("userId");
             User user = userService.findUserById(userIntId.longValue());
             String username = user.getUsername();
-            int count = messageMapper.getNoticeCount(user.getId(), EntityTypeConstant.TOPIC_COMMENT);
-            int unread = messageMapper.getNoticeUnreadCount(user.getId(), EntityTypeConstant.TOPIC_COMMENT);
+            int count = messageMapper.getNoticeCount(message.getToId(), EntityTypeConstant.TOPIC_COMMENT);
+            int unread = messageMapper.getNoticeUnreadCount(message.getToId(), EntityTypeConstant.TOPIC_COMMENT);
 
             NotificationVO notificationVO = NotificationVO.builder()
                     .type(EntityTypeConstant.TOPIC_COMMENT)
@@ -205,8 +202,8 @@ public class MessageServiceImpl implements MessageService {
             Integer userIntId = (Integer) data.get("userId");
             User user = userService.findUserById(userIntId.longValue());
             String username = user.getUsername();
-            int count = messageMapper.getNoticeCount(user.getId(), EntityTypeConstant.TOPIC_LIKE);
-            int unread = messageMapper.getNoticeUnreadCount(user.getId(), EntityTypeConstant.TOPIC_LIKE);
+            int count = messageMapper.getNoticeCount(message.getToId(), EntityTypeConstant.TOPIC_LIKE);
+            int unread = messageMapper.getNoticeUnreadCount(message.getToId(), EntityTypeConstant.TOPIC_LIKE);
 
             NotificationVO notificationVO = NotificationVO.builder()
                     .type(EntityTypeConstant.TOPIC_LIKE)
@@ -230,8 +227,8 @@ public class MessageServiceImpl implements MessageService {
             Integer userIntId = (Integer) data.get("userId");
             User user = userService.findUserById(userIntId.longValue());
             String username = user.getUsername();
-            int count = messageMapper.getNoticeCount(user.getId(), EntityTypeConstant.TOPIC_FOLLOW);
-            int unread = messageMapper.getNoticeUnreadCount(user.getId(), EntityTypeConstant.TOPIC_FOLLOW);
+            int count = messageMapper.getNoticeCount(message.getToId(), EntityTypeConstant.TOPIC_FOLLOW);
+            int unread = messageMapper.getNoticeUnreadCount(message.getToId(), EntityTypeConstant.TOPIC_FOLLOW);
 
             NotificationVO notificationVO = NotificationVO.builder()
                     .type(EntityTypeConstant.TOPIC_FOLLOW)
@@ -247,5 +244,46 @@ public class MessageServiceImpl implements MessageService {
         }
 
         return notificationVOList;
+    }
+
+    /**
+     * Page query notifications under a topic
+     * @param noticePageQueryDTO
+     * @return
+     */
+    public PageResult pageQueryNotification(NoticePageQueryDTO noticePageQueryDTO) {
+        PageHelper.startPage(noticePageQueryDTO.getPage(), noticePageQueryDTO.getPageSize());
+        Page<Message> page = messageMapper.pageQueryNotice(noticePageQueryDTO);
+        List<Message> messageList = page.getResult();
+
+        List<NotificationVO> notificationVOList = new ArrayList<>();
+        for (Message message : messageList) {
+            Map<String, Object> data = JSONObject.parseObject(message.getContent());
+            Integer userIntId = (Integer) data.get("userId");
+            User user = userService.findUserById(userIntId.longValue());
+            String username = user.getUsername();
+
+            NotificationVO notificationVO = NotificationVO.builder()
+                    .createTime(message.getCreateTime())
+                    .username(username)
+                    .userId(user.getId())
+                    .avatar(user.getAvatar())
+                    .entityType((Integer) data.get("entityType"))
+                    .entityId(((Integer) data.get("entityId")).longValue())
+                    .build();
+
+            if (data.get("postId") != null) {
+                notificationVO.setPostId(((Integer) data.get("postId")).longValue());
+            }
+            notificationVOList.add(notificationVO);
+        }
+
+        // Set read status
+        List<Long> unreadIds = getUnreadIds(messageList);
+        if (!unreadIds.isEmpty()) {
+            messageMapper.update(unreadIds, Message.READ_STATUS);
+        }
+
+        return new PageResult(page.getTotal(), notificationVOList);
     }
 }

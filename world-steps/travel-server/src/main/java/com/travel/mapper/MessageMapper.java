@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.travel.dto.MessageConversationPageQueryDTO;
 import com.travel.dto.MessagePageQueryDTO;
 import com.travel.dto.MessageUnreadDTO;
+import com.travel.dto.NoticePageQueryDTO;
 import com.travel.entity.Message;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -74,5 +75,10 @@ public interface MessageMapper {
      * @return
      */
     int getNoticeUnreadCount(Long userId, String topic);
+
+    /**
+     * Page query notifications under a topic
+     */
+    Page<Message> pageQueryNotice(NoticePageQueryDTO noticePageQueryDTO);
 
 }

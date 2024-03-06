@@ -68,5 +68,13 @@
               and conversation_id = #{topic}
           </if>
     </select>
+    <select id="pageQueryNotice" resultType="com.travel.entity.Message">
+        select * from message
+        where status != 2
+            and from_id = 1
+            and to_id = #{userId}
+            and conversation_id = #{topic}
+            order by create_time desc
+    </select>
 
 </mapper>

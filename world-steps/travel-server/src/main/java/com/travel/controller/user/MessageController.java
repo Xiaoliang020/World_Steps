@@ -4,6 +4,7 @@ import com.travel.context.BaseContext;
 import com.travel.dto.MessageConversationPageQueryDTO;
 import com.travel.dto.MessageDTO;
 import com.travel.dto.MessagePageQueryDTO;
+import com.travel.dto.NoticePageQueryDTO;
 import com.travel.result.PageResult;
 import com.travel.result.Result;
 import com.travel.service.MessageService;
@@ -73,5 +74,17 @@ public class MessageController {
         log.info("查询通知：{}", BaseContext.getCurrentId());
         List<NotificationVO> notifications = messageService.getNotifications(BaseContext.getCurrentId());
         return Result.success(notifications);
+    }
+
+    /**
+     * Page query notifications
+     * @return
+     */
+    @GetMapping("/notifications")
+    @ApiOperation("Page query notifications under a topic")
+    public Result<PageResult> pageNotifications(NoticePageQueryDTO noticePageQueryDTO) {
+        log.info("分页查询主题通知：{}", noticePageQueryDTO);
+        PageResult pageResult = messageService.pageQueryNotification(noticePageQueryDTO);
+        return Result.success(pageResult);
     }
 }
